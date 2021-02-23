@@ -1,0 +1,112 @@
+<html>
+<head>
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+<title>Church App</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<link rel=stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel=stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+
+</head>
+
+<body style="background-color:powderblue;">
+<h1>Our Church App</h1>
+<div id="about-us"></div>
+<div>
+    <h1>Media Timeline</h1>
+    <br/>
+    <div class="table-responsive">
+    <table class="display" style="width:100%"" id="medialist_table">
+        <thead>
+	    <tr>
+	    	<th>Episode</th>
+		<th>Title</th>
+		<th>Media</th>
+		<th>Description</th>
+		<th>Image</th>
+		<th>Icon</th>
+		<th>Audio</th>
+		<th>RemoteId</th>
+		<th>Status</th>
+		<th>isActive</th>
+		<th>inId</th>
+		<th>CreateDate</th>
+		<th>MediaName</th>
+		<th>Category</th>
+		<th>Epoch</th>
+		<th>AudioSize</th>
+	    </tr>
+	</thead>
+	<tbody>
+        </tbody>
+    </table>
+    </div>
+</div>
+</body>
+<script>
+
+$(document).ready(function(){
+  $.getJSON("https://arthurfrost.qflo.co.za/php/getTimeline.php", function(result){
+    var about_us = "";
+    var timeline_data = "";
+    console.log(result);
+    //load the about section	  
+    $.each(result['Body'], function(key, value){
+      console.log(value);
+      //now load the key
+	    about_us = "<div id='about-us'>"+value['About']+"</div>";
+    });
+    console.log("About Us", about_us); 
+    $('#about-us').replaceWith(about_us);
+    //now load the timeline
+    $.each(result['Timeline'], function(key, value){
+	timeline_data += '<tr>' ;
+	timeline_data += '<td>' +value.Episode+'</td>';
+	timeline_data += '<td>' +value.Title+'</td>';
+      	timeline_data += '<td>' +value.Media+'</td>';
+      	timeline_data += '<td>' +value.Description+'</td>';
+      	timeline_data += '<td>' +value.Icon+'</td>';
+      	timeline_data += '<td>' +value.Audio+'</td>';
+      	timeline_data += '<td>' +value.RemoteId+'</td>';
+      	timeline_data += '<td>' +value.Status+'</td>';
+      	timeline_data += '<td>' +value.isActive+'</td>';
+      	timeline_data += '<td>' +value.inId+'</td>';
+      	timeline_data += '<td>' +value.CreateDate+'</td>';
+      	timeline_data += '<td>' +value.MediaName+'</td>';
+      	timeline_data += '<td>' +value.Category+'</td>';
+      	timeline_data += '<td>' +value.Epoch+'</td>';
+      	timeline_data += '<td>' +value.AudioSize+'</td>';
+      	timeline_data += '</tr>' ;
+    });
+    console.log("Timeline", timeline_data);
+    //after loading the timeline_data
+   
+    $('#medialist_table tr').not(':first').not(':last').remove();
+    $('#medialist_table tr').first().after(timeline_data);
+    $('#medialist_table').DataTable();
+    
+  });
+})
+</script>
+
+</html>
